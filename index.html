@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GAIL's Bakery Feedback</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('https://i.imgur.com/ZMfRvnZ.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.9);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .form-box {
+      max-width: 600px;
+      width: 100%;
+      background: #fffdf7;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      padding: 30px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #c49a6c;
+      color: white;
+      padding: 12px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 10px;
+      width: 100%;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="form-box">
+      <h2>We Knead Your Feedback 🍞</h2>
+      <form id="feedbackForm">
+        <label>Item Enjoyed:</label>
+        <input type="text" name="item" required>
+
+        <label>Experience:</label>
+        <input type="text" name="experience" required>
+
+        <label>How was our team?</label>
+        <textarea name="team" rows="3" required></textarea>
+
+        <label>Suggestions:</label>
+        <textarea name="improve" rows="3"></textarea>
+
+        <label>Would you recommend us?</label>
+        <select name="recommend">
+          <option>Yes</option>
+          <option>Maybe</option>
+          <option>No</option>
+        </select>
+
+        <button type="submit">Send Feedback</button>
+      </form>
+      <p id="responseMsg"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("feedbackForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {};
+
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
+
+      fetch("https://script.google.com/macros/s/AKfycbw3MWUAfwmRUBcf4CK2P0Uu2Yh0Z00bbqEJ5L_VBMW7Er8eurfUHYWnraw4uoPJgua0/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      }).then(() => {
+        document.getElementById("responseMsg").innerText = "✅ Thank you! Feedback submitted.";
+        form.reset();
+      }).catch(err => {
+        document.getElementById("responseMsg").innerText = "❌ Submission failed.";
+      });
+    });
+  </script>
+</body>
+</html>
